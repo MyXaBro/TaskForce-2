@@ -6,25 +6,38 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'homeUrl' => ['tasks/index'],
+    'language' => 'ru_RU',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+            'authClientCollection' => [
+                'class' => 'yii\authclient\Collection',
+                'clients' => [
+                    'vkontakte' => [
+                        'class' => 'yii\authclient\clients\VKontakte',
+                        'clientId' => '51606094',
+                        'clientSecret' => 'nZXoDPnNGDu2LczyU6kW',
+                        'scope' => ['email'],
+                    ],
+                ],
+            ],
+
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ndvtBb6xRrjPn15GUlDrQ11TuzGA0A3A',
         ],
+
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
-        ],
-        'errorHandler' => [
-            'errorAction' => 'site/error',
+            'loginUrl' => ['site/index']
         ],
         'mailer' => [
             'class' => \yii\symfonymailer\Mailer::class,
@@ -46,6 +59,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // ...
             ],
         ],
     ],

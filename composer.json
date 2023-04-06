@@ -13,11 +13,17 @@
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.4.0",
+        "php": ">=8.1.1",
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
-        "yiisoft/yii2-symfonymailer": "~2.0.3"
+        "yiisoft/yii2-symfonymailer": "~2.0.3",
+        "ext-pdo": "*",
+        "coduo/php-humanizer": "^4.0",
+        "la-haute-societe/yii2-save-relations-behavior": "^1.7",
+        "enyo/dropzone": "^5.9",
+        "yiisoft/yii2-authclient": "^2.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

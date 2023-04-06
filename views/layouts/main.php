@@ -1,83 +1,85 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var string $content */
+/* @var $this yii\web\View */
+/* @var $content string */
 
 use app\assets\AppAsset;
-use app\widgets\Alert;
-use yii\bootstrap5\Breadcrumbs;
-use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\Menu;
 
 AppAsset::register($this);
-
-$this->registerCsrfMetaTags();
-$this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
-$this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
-$this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
-$this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>" class="h-100">
-<head>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
-</head>
-<body class="d-flex flex-column h-100">
-<?php $this->beginBody() ?>
+    <!DOCTYPE html>
+    <html lang="<?= Yii::$app->language ?>">
+    <head>
+        <meta charset="<?= Yii::$app->charset ?>">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?php $this->registerCsrfMetaTags() ?>
+        <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
+    </head>
+    <body>
+    <?php $this->beginBody() ?>
 
-<header id="header">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-        ]
-    ]);
-    NavBar::end();
-    ?>
-</header>
-
-<main id="main" class="flex-shrink-0" role="main">
-    <div class="container">
-        <?php if (!empty($this->params['breadcrumbs'])): ?>
-            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-        <?php endif ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
-</main>
-
-<footer id="footer" class="mt-auto py-3 bg-light">
-    <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+    <header class="page-header">
+        <nav class="main-nav">
+            <a href='http://taskforce' class="header-logo">
+                <img class="logo-image" src="/img/logotype.png" width=227 height=60 alt="taskforce">
+            </a>
+            <?php if (Yii::$app->controller->id !== 'auth'): ?>
+            <div class="nav-wrapper">
+                <?=Menu::widget([
+                    'options' => ['class' => 'nav-list'], 'activeCssClass' => 'list-item--active',
+                    'itemOptions' => ['class' => 'list-item'],
+                    'linkTemplate' => '<a href="{url}" class="link link--nav">{label}</a>',
+                    'items' => [
+                        ['label' => 'Все задания', 'url' => ['tasks/index']],
+                        ['label' => 'Мои задания', 'url' => ['tasks/my']],
+                        ['label' => 'Создать задание', 'url' => ['tasks/create']],
+                        ['label' => 'Настройки', 'url' => ['user/settings']]
+                    ]
+                ]); ?>
+                <?php endif; ?>
+            </div>
+        </nav>
+        <?php if(Yii::$app->controller->id !== 'auth'):?>
+        <?php $user = Yii::$app->user->identity?>
+         <div class="user-block">
+            <a href="#">
+                <img class="user-photo" src="<?php if ($user !== null && $user->avatar !== null):?>
+                    <?=$user->avatar;?>
+" width="55" height="55" alt="Аватар">
+                <?php endif; ?>
+            </a>
+            <div class="user-menu">
+                <p class="user-name"><?php if ($user !== null && $user->name !== null):?>
+                    <?=$user->name;?>
+                    <?php endif;?>
+                </p>
+                <div class="popup-head">
+                    <ul class="popup-menu">
+                        <li class="menu-item">
+                            <a href="<?=Url::toRoute(['user/settings']);?>" class="link">Настройки</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="link">Связаться с нами</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="<?=Url::toRoute(['auth/logout']);?>" class="link">Выход из системы</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
-
-<?php $this->endBody() ?>
-</body>
-</html>
+<?php endif; ?>
+    </header>
+    <main class="main-content container">
+        <?=$content; ?>
+    </main>
+    <?php $this->endBody() ?>
+    </body>
+    </html>
 <?php $this->endPage() ?>

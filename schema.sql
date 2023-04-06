@@ -231,3 +231,8 @@ INSERT INTO opinions (description, rate, dt_add, owner_id, task_id, performer_id
                                                                                       ('Quam dolores laboriosam hic porro similique dolor repellendus.', 2, '2021-04-02', 6, 9, 10),
                                                                                       ('Eligendi deleniti ut occaecati ut autem.', 5, '2021-04-30', 2, 11, 10),
                                                                                       ('Enim sint quia rerum harum.', 4, '2021-04-07', 1, 25, 9);
+
+ALTER TABLE `tasks`
+    ADD CONSTRAINT `fk_tasks_users`
+        FOREIGN KEY (`performer_id`) REFERENCES `users` (`id`)
+            ON DELETE CASCADE;
